@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <!DOCTYPE struts PUBLIC
+            "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+            "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+    <struts>
+
+        <!--动态方法调用的开关 可以将类似的配置简化成一个 可以再请求路径中提取出你想要使用的方法-->
+        <constant name="struts.enable.DynamicMethodInvocation" value="true"/>
+        <!--extends 继承自哪些包-->
+        <!--struts-default这个包下面有一些封装好的过滤器，对请求中的参数进行处理的-->
+        <package name="default" extends="struts-default" namespace="/user">
+            <!--来声明允许动态方法调用的方法-->
+            <global-allowed-methods>login,regist</global-allowed-methods>
+            <!--这里的name 值就是请求页面需要输入的路径-->
+            <!--这里的class 就是请求找到的类，进入类里面的时候，就会去找execute()方法来处理这个请求-->
+            <action name="hello" class="action.HelloAction">
+                <!--success 就是前面HelloAction类中的返回值 success，当返回这个常量的时候，跳转到指定页面-->
+                <result name="success">/helloAction.jsp</result>
+                <result name="error">/error.jsp</result>
+            </action>
+            <!--如果不写method的话，请求进来就会找execute()方法-->
+            <action name="login" class="action.TestAction" method="login">
+                <result name="success">/helloAction.jsp</result>
+                <result name="error">/error.jsp</result>
+            </action>
+            <action name="regist" class="action.TestAction" method="regist">
+                <result name="success">/helloAction.jsp</result>
+                <result name="error">/error.jsp</result>
+            </action>
+
+            <action name="user" class="action.TestAction">
+                <!--如果使用动态调用需要在请求路径后面加上name 这个前缀-->
+                <result name="success">/helloAction.jsp</result>
+                <result name="error">/error.jsp</result>
+            </action>
+
+            <action name="*User" class="action.TestAction" method="{1}">
+                <!--method这个{1} 表示的是前面这个name中第一个字符-->
+                <result name="success">/helloAction.jsp</result>
+                <result name="error">/error.jsp</result>
+            </action>
+        </package>
+    </struts>
